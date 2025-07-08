@@ -8,12 +8,12 @@ namespace MineSweeper
 {
     public class MineGrid
     {
-        public List<List<MineGridSquare>> MineGridMap;
+        public List<List<MineGridSquare>> Grid;
         Random MineChance;
 
         public MineGrid(int rows, int columns, double percentMines) 
         {
-            MineGridMap = [[]];
+            Grid = [[]];
             MineChance = new Random();
             InitializeGrid(rows, columns);
             PlaceBombs(percentMines);
@@ -22,11 +22,12 @@ namespace MineSweeper
 
         public MineGrid InitializeGrid(int rows = 14, int columns = 18)
         {
+            //need to append new rows when creating it
             for (int i = 0; i < rows; i++)
             {
                 for (int j = 0; j < columns; j++)
                 {
-                    MineGridMap[i][j] = new MineGridSquare();
+                    Grid[i][j] = new MineGridSquare();
                 }
             }
             return this;
@@ -34,13 +35,13 @@ namespace MineSweeper
 
         public MineGrid PlaceBombs(double percentMines = 0.1)
         {
-            for (int i = 0; i < MineGridMap.Count; i++)
+            for (int i = 0; i < Grid.Count; i++)
             {
-                for (int j = 0; j < MineGridMap[i].Count; j++)
+                for (int j = 0; j < Grid[i].Count; j++)
                 {
                     if (MineChance.NextDouble() <= percentMines)
                     {
-                        MineGridMap[i][j].IsBomb = true;
+                        Grid[i][j].IsBomb = true;
                     }
                 }
             }
@@ -49,11 +50,11 @@ namespace MineSweeper
 
         public MineGrid PlaceNumberHints() 
         {
-            for (int i = 0; i < MineGridMap.Count; i++)
+            for (int i = 0; i < Grid.Count; i++)
             {
-                for (int j = 0; j<MineGridMap[i].Count; j++)
+                for (int j = 0; j<Grid[i].Count; j++)
                 {
-                    MineGridMap[i][j].NumBombsAround = CalculateBombs(i, j);
+                    Grid[i][j].NumBombsAround = CalculateBombs(i, j);
                 }
             }
             return this;
@@ -61,7 +62,7 @@ namespace MineSweeper
 
         public int CalculateBombs(int rowNum, int colNum)
         {
-            if (MineGridMap[rowNum][colNum].IsBomb)
+            if (Grid[rowNum][colNum].IsBomb)
             {
                 return -1;
             }
@@ -72,7 +73,7 @@ namespace MineSweeper
                 {
                     if (IsValidCoord(rowNum + i, colNum + j, i, j))
                     {
-                        if (MineGridMap[i][j].IsBomb)
+                        if (Grid[i][j].IsBomb)
                         {
                             numBombs++;
                         }
@@ -84,11 +85,48 @@ namespace MineSweeper
 
         public bool IsValidCoord(int rowNum, int colNum, int rowModifier, int colModifier)
         {
-            if (rowNum < 0 || rowNum >= MineGridMap.Count || colNum < 0 || colNum >= MineGridMap[0].Count || (rowModifier == 0 && colModifier == 0))
+            if (rowNum < 0 || rowNum >= Grid.Count || colNum < 0 || colNum >= Grid[0].Count || (rowModifier == 0 && colModifier == 0))
             {
                 return false;
             }
             return true;
+        }
+
+        public void DisplayGrid()
+        {
+            for (int i = 1; i <= Grid.Count; i++)
+            {
+                for (int j = 0; j < Grid[^i].Count; j++)
+                {
+                    MineGridSquare square = Grid[i][j];
+                    int status = Grid[i][j].Status; 
+                    if (status == 0)
+                    {
+                        Console.Write("O ");
+                    }
+                    else if (status == 1)
+                    {
+                        if (square.NumBombsAround == 0)
+                        {
+                            Console.Write("  ");
+                        }
+                        else
+                        {
+                            Console.Write($"{square.NumBombsAround}");
+                        }
+                    }
+                    else if (status == 2)
+                    {
+                        Console.Write("- ");
+                    }
+                    else
+                    {
+                        throw new Exception("Somehow square has a status out of range");
+                    }
+                }
+                Console.WriteLine();
+            }
+            Console.WriteLine("\n1 2 3 4 5 6 7");
         }
     }
 }
