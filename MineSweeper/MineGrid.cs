@@ -4,12 +4,17 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+
+
 namespace MineSweeper
 {
     public class MineGrid
     {
         public List<List<MineGridSquare>> Grid;
         Random MineChance;
+        public const int UNEXPLORED = 0;
+        public const int EXPLORED = 1;
+        public const int FLAGGED = 2;
 
         public MineGrid(int rows, int columns, double percentMines) 
         {
@@ -84,7 +89,7 @@ namespace MineSweeper
             return numBombs;
         }
 
-        public bool IsValidCoord(int rowNum, int colNum, int rowModifier, int colModifier)
+        public bool IsValidCoord(int rowNum, int colNum, int rowModifier = 1, int colModifier = 1)
         {
             if (rowNum < 0 || rowNum >= Grid.Count || colNum < 0 || colNum >= Grid[0].Count || (rowModifier == 0 && colModifier == 0))
             {
@@ -95,6 +100,7 @@ namespace MineSweeper
 
         public void DisplayGrid()
         {
+            Console.WriteLine();
             for (int i = 1; i < Grid.Count; i++)
             {
                 Console.Write($"{i} ");
@@ -106,24 +112,24 @@ namespace MineSweeper
                 {
                     MineGridSquare square = Grid[i][j];
                     int status = Grid[i][j].Status; 
-                    if (status == 0)
+                    if (status == UNEXPLORED)
                     {
                         Console.Write("O  ");
                     }
-                    else if (status == 1)
+                    else if (status == EXPLORED)
                     {
                         if (square.NumBombsAround == 0)
                         {
-                            Console.Write("  ");
+                            Console.Write("   ");
                         }
                         else
                         {
                             Console.Write($"{square.NumBombsAround}");
                         }
                     }
-                    else if (status == 2)
+                    else if (status == FLAGGED)
                     {
-                        Console.Write("- ");
+                        Console.Write("-  ");
                     }
                     else
                     {
@@ -136,12 +142,26 @@ namespace MineSweeper
             for (int i = 0; i < Grid[0].Count; i++)
             {
                 Console.Write($"{i+1} ");
-                if (i < 10)
+                if (i + 1 < 10)
                 {
                     Console.Write(' ');
                 }
             }
-            
+            Console.WriteLine();
+        }
+
+        public MineGrid? MarkSquare(int exploreOrFlag, int row, int column)
+        {
+            if (!IsValidCoord(row, column))
+            {
+                Console.WriteLine("Invalid coordinates given");
+                return null;
+            }
+            if (exploreOrFlag == FLAGGED)
+            {
+                Grid[row][column].Status = FLAGGED;
+            }
+            return this;
         }
     }
 }
