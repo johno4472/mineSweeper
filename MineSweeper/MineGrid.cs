@@ -13,7 +13,7 @@ namespace MineSweeper
 
         public MineGrid(int rows, int columns, double percentMines) 
         {
-            Grid = [[]];
+            Grid = [];
             MineChance = new Random();
             InitializeGrid(rows, columns);
             PlaceBombs(percentMines);
@@ -25,9 +25,10 @@ namespace MineSweeper
             //need to append new rows when creating it
             for (int i = 0; i < rows; i++)
             {
+                Grid.Add([]);
                 for (int j = 0; j < columns; j++)
                 {
-                    Grid[i][j] = new MineGridSquare();
+                    Grid[i].Add(new MineGridSquare());
                 }
             }
             return this;
@@ -94,15 +95,20 @@ namespace MineSweeper
 
         public void DisplayGrid()
         {
-            for (int i = 1; i <= Grid.Count; i++)
+            for (int i = 1; i < Grid.Count; i++)
             {
-                for (int j = 0; j < Grid[^i].Count; j++)
+                Console.Write($"{i} ");
+                if (i < 10)
+                {
+                    Console.Write(' ');
+                }
+                for (int j = 0; j < Grid[i].Count; j++)
                 {
                     MineGridSquare square = Grid[i][j];
                     int status = Grid[i][j].Status; 
                     if (status == 0)
                     {
-                        Console.Write("O ");
+                        Console.Write("O  ");
                     }
                     else if (status == 1)
                     {
@@ -124,9 +130,18 @@ namespace MineSweeper
                         throw new Exception("Somehow square has a status out of range");
                     }
                 }
-                Console.WriteLine();
+                Console.WriteLine("");
             }
-            Console.WriteLine("\n1 2 3 4 5 6 7");
+            Console.Write("   ");
+            for (int i = 0; i < Grid[0].Count; i++)
+            {
+                Console.Write($"{i+1} ");
+                if (i < 10)
+                {
+                    Console.Write(' ');
+                }
+            }
+            
         }
     }
 }
