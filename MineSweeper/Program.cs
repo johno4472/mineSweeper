@@ -3,7 +3,7 @@ using MineSweeper;
 
 Console.WriteLine("Hello, World!");
 
-MineGrid game = new MineGrid(14, 18, 0.1);
+MineGrid game = new MineGrid(14, 18, 0.02);
 game.DisplayGrid();
 
 string row;
@@ -19,5 +19,10 @@ while (true)
     column = Console.ReadLine() ?? " ";
     game.MarkSquare(Int32.Parse(action), Int32.Parse(row), Int32.Parse(column));
     game.DisplayGrid();
+    if (game.CheckIfWinner())
+    {
+        Console.WriteLine("You've won!");
+        break;
+    }
 }
 
