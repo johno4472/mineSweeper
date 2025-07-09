@@ -102,6 +102,13 @@ namespace MineSweeper
         public void DisplayGrid()
         {
             Console.WriteLine();
+            Console.Write("   ");
+            for (int i = 1; i < Grid[0].Count; i++)
+            {
+                Console.Write("___");
+                string macron = "¯";
+            }
+            Console.WriteLine("____");
             for (int i = 1; i < Grid.Count; i++)
             {
                 Console.Write($"{i} ");
@@ -109,49 +116,71 @@ namespace MineSweeper
                 {
                     Console.Write(' ');
                 }
+                Console.Write("| ");
+
+                string spacing = "  ";
                 for (int j = 0; j < Grid[i].Count; j++)
                 {
+                    if (j == Grid[i].Count - 1)
+                    {
+                        spacing = " ";
+                    }
                     MineGridSquare square = Grid[i][j];
                     int status = Grid[i][j].Status; 
                     if (status == UNEXPLORED)
                     {
-                        Console.Write("O  ");
+                        Console.Write($"O{spacing}");
                     }
                     else if (status == EXPLORED)
                     {
                         if (square.NumBombsAround == 0)
                         {
-                            Console.Write("   ");
+                            Console.Write($" {spacing}");
                         }
                         else if (square.NumBombsAround == -1)
                         {
-                            Console.Write($"X  ");
+                            Console.Write($"X{spacing}");
                         }
                         else
                         {
-                            Console.Write($"{square.NumBombsAround}  ");
+                            Console.Write($"{square.NumBombsAround + spacing}");
                         }
                         
                     }
                     else if (status == FLAGGED)
                     {
-                        Console.Write("-  ");
+                        Console.Write($"-{spacing}");
                     }
                     else
                     {
                         throw new Exception("Somehow square has a status out of range");
                     }
                 }
-                Console.WriteLine("");
+                Console.WriteLine("|");
             }
-            Console.Write("   ");
+            Console.Write("   |");
+            bool writeNums = false;
             for (int i = 0; i < Grid[0].Count; i++)
             {
-                Console.Write($"{i+1} ");
-                if (i + 1 < 10)
+                if (!writeNums)
                 {
-                    Console.Write(' ');
+                    Console.Write("\u0304\u0304\u0304");
+                    if (i == Grid[0].Count - 1)
+                    {
+                        Console.Write("|\n   ");
+                        writeNums = true;
+                        i = -1;
+                    }
                 }
+                else
+                {
+                    Console.Write($"{i + 1} ");
+                    if (i + 1 < 10)
+                    {
+                        Console.Write(' ');
+                    }
+                }
+                    
             }
             Console.WriteLine();
         }
