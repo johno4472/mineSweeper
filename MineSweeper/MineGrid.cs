@@ -17,6 +17,7 @@ namespace MineSweeper
         public const int EXPLORED = 1;
         public const int FLAGGED = 2;
         public bool GameLost = false;
+        
 
         public MineGrid(int rows, int columns, double percentMines) 
         {
@@ -176,7 +177,7 @@ namespace MineSweeper
                     {
                         Console.BackgroundColor = ConsoleColor.DarkYellow;
                         Console.ForegroundColor = ConsoleColor.Red;
-                        Console.Write($"-{spacing}");
+                        Console.Write($"?{spacing}");
                         Console.ResetColor();
                     }
                     else
