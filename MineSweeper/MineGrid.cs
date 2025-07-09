@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.Design;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -79,7 +80,7 @@ namespace MineSweeper
                 {
                     if (IsValidCoord(rowNum + i, colNum + j, i, j))
                     {
-                        if (Grid[i][j].IsBomb)
+                        if (Grid[rowNum + i][colNum + j].IsBomb)
                         {
                             numBombs++;
                         }
@@ -122,10 +123,15 @@ namespace MineSweeper
                         {
                             Console.Write("   ");
                         }
+                        else if (square.NumBombsAround == -1)
+                        {
+                            Console.Write($"X  ");
+                        }
                         else
                         {
-                            Console.Write($"{square.NumBombsAround}");
+                            Console.Write($"{square.NumBombsAround}  ");
                         }
+                        
                     }
                     else if (status == FLAGGED)
                     {
@@ -157,10 +163,7 @@ namespace MineSweeper
                 Console.WriteLine("Invalid coordinates given");
                 return null;
             }
-            if (exploreOrFlag == FLAGGED)
-            {
-                Grid[row][column].Status = FLAGGED;
-            }
+            Grid[row][column].Status = exploreOrFlag;
             return this;
         }
     }

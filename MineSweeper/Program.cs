@@ -3,7 +3,7 @@ using MineSweeper;
 
 Console.WriteLine("Hello, World!");
 
-MineGrid game = new MineGrid(14, 18, 10);
+MineGrid game = new MineGrid(14, 18, 0.1);
 game.DisplayGrid();
 
 game.MarkSquare(2, 2, 2);

@@ -17,6 +17,6 @@ namespace MineSweeper
         public bool IsBomb { get; set; } = false;
 
         //0 - unexplored, 1 - explored, 2 - flagged; all set to unexplored by default
-        public int Status { get; set; } = 0;
+        public int Status { get; set; } = 1;
     }
 }
