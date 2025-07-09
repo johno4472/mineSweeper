@@ -103,12 +103,30 @@ namespace MineSweeper
         {
             Console.WriteLine();
             Console.Write("   ");
-            for (int i = 1; i < Grid[0].Count; i++)
+            bool writeNums = true;
+            Console.Write("  ");
+            for (int i = 0; i < Grid[0].Count; i++)
             {
-                Console.Write("___");
-                string macron = "¯";
+                if (writeNums)
+                {
+                    Console.Write($"{i + 1} ");
+                    if (i + 1 < 10)
+                    {
+                        Console.Write(' ');
+                    }
+                    if (i == Grid[0].Count - 1)
+                    {
+                        Console.Write("\n   ");
+                        writeNums = false;
+                        i = -1;
+                    }
+                }
+                else
+                {
+                    Console.Write("___");
+                }
             }
-            Console.WriteLine("____");
+            Console.WriteLine("_");
             for (int i = 1; i < Grid.Count; i++)
             {
                 Console.Write($"{i} ");
@@ -156,10 +174,9 @@ namespace MineSweeper
                         throw new Exception("Somehow square has a status out of range");
                     }
                 }
-                Console.WriteLine("|");
+                Console.WriteLine($"| {i}");
             }
             Console.Write("   |");
-            bool writeNums = false;
             for (int i = 0; i < Grid[0].Count; i++)
             {
                 if (!writeNums)
@@ -167,7 +184,7 @@ namespace MineSweeper
                     Console.Write("\u0304\u0304\u0304");
                     if (i == Grid[0].Count - 1)
                     {
-                        Console.Write("|\n   ");
+                        Console.Write("|\n     ");
                         writeNums = true;
                         i = -1;
                     }
