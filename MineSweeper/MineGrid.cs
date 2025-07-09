@@ -240,7 +240,9 @@ namespace MineSweeper
                 if (Grid[row][column].IsBomb)
                 {
                     GameLost = true;
+                    return;
                 }
+
                 if (Grid[row][column].NumBombsAround == 0)
                 {
                     ExploreSquare(row - 1, column - 1);
@@ -272,6 +274,25 @@ namespace MineSweeper
             }
             
             return this;
+        }
+
+        public bool CheckIfWinner()
+        {
+            for (int i = 0; i < Grid.Count; i++)
+            {
+                for (int j = 0; j < Grid[i].Count; j++)
+                {
+                    if (Grid[i][j].Status == UNEXPLORED)
+                    {
+                        return false;
+                    }
+                    else if (Grid[i][j].Status == FLAGGED & !Grid[i][j].IsBomb)
+                    {
+                        return false;
+                    }
+                }
+            }
+            return true;
         }
     }
 }
