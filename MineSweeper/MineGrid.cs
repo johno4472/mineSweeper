@@ -149,33 +149,35 @@ namespace MineSweeper
                     if (GameLost && square.IsBomb && square.Status != FLAGGED)
                     {
                         Console.ForegroundColor = ConsoleColor.Red;
-                        Console.Write($"X{spacing}");
+                        Console.BackgroundColor = ConsoleColor.DarkYellow;
+                        Console.Write($"X");
                         Console.ResetColor();
+                        Console.Write($"{spacing}");
                         continue;
                     }
                     int status = Grid[i][j].Status; 
                     if (status == UNEXPLORED)
                     {
+                        Console.ForegroundColor = ConsoleColor.DarkGreen;
                         Console.Write($"O{spacing}");
+                        Console.ResetColor();
                     }
                     else if (status == EXPLORED)
                     {
                         if (square.NumBombsAround == 0)
                         {
-                            Console.BackgroundColor = ConsoleColor.Green;
                             Console.Write($" {spacing}");
                         }
                         else
                         {
-                            Console.BackgroundColor = ConsoleColor.DarkYellow;
-                            Console.ForegroundColor = ConsoleColor.Black;
+                            Console.ForegroundColor = ConsoleColor.Yellow;
                             Console.Write($"{square.NumBombsAround + spacing}");
+                            Console.ResetColor();
                         }
                         Console.ResetColor();
                     }
                     else if (status == FLAGGED)
                     {
-                        Console.BackgroundColor = ConsoleColor.DarkYellow;
                         Console.ForegroundColor = ConsoleColor.Red;
                         Console.Write($"?{spacing}");
                         Console.ResetColor();
