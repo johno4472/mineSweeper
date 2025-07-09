@@ -17,6 +17,7 @@ namespace MineSweeper
         public const int EXPLORED = 1;
         public const int FLAGGED = 2;
         public bool GameLost = false;
+        public bool ResetTurn = false;
         
 
         public MineGrid(int rows, int columns, double percentMines) 
@@ -30,7 +31,6 @@ namespace MineSweeper
 
         public MineGrid InitializeGrid(int rows = 14, int columns = 18)
         {
-            //need to append new rows when creating it
             for (int i = 0; i < rows; i++)
             {
                 Grid.Add([]);
@@ -227,8 +227,8 @@ namespace MineSweeper
             }
             else if (Grid[row][column].Status == EXPLORED)
             {
-                //eventually throw error to reset turn
-                Console.WriteLine("Cannot flag an explored spot");
+                ResetTurn = true;
+                Console.WriteLine("Cannot flag an explored spot. Unflag it first");
             }
         }
 
@@ -261,6 +261,7 @@ namespace MineSweeper
         {
             if (!IsValidCoord(row, column))
             {
+                ResetTurn = true;
                 Console.WriteLine("Invalid coordinates given");
                 return null;
             }
