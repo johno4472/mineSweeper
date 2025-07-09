@@ -8,13 +8,16 @@ game.DisplayGrid();
 
 string row;
 string column;
+string action;
 while (true)
 {
+    Console.Write("\nExplore(1) or Flag(2): ");
+    action = Console.ReadLine() ?? " ";
     Console.Write("Row: ");
     row = Console.ReadLine() ?? " ";
-    Console.Write("\nColumn: ");
+    Console.Write("Column: ");
     column = Console.ReadLine() ?? " ";
-    game.MarkSquare(2, Int32.Parse(row), Int32.Parse(column));
+    game.MarkSquare(Int32.Parse(action), Int32.Parse(row), Int32.Parse(column));
     game.DisplayGrid();
 }
 

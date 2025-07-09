@@ -109,7 +109,7 @@ namespace MineSweeper
             {
                 if (writeNums)
                 {
-                    Console.Write($"{i + 1} ");
+                    Console.Write($"{i} ");
                     if (i + 1 < 10)
                     {
                         Console.Write(' ');
@@ -127,7 +127,7 @@ namespace MineSweeper
                 }
             }
             Console.WriteLine("_");
-            for (int i = 1; i < Grid.Count; i++)
+            for (int i = 0; i < Grid.Count; i++)
             {
                 Console.Write($"{i} ");
                 if (i < 10)
@@ -191,7 +191,7 @@ namespace MineSweeper
                 }
                 else
                 {
-                    Console.Write($"{i + 1} ");
+                    Console.Write($"{i} ");
                     if (i + 1 < 10)
                     {
                         Console.Write(' ');
@@ -202,6 +202,42 @@ namespace MineSweeper
             Console.WriteLine();
         }
 
+        public void FlagSquare(int row, int column)
+        {
+            if (Grid[row][column].Status == UNEXPLORED)
+            {
+                Grid[row][column].Status = FLAGGED;
+            }
+            else if (Grid[row][column].Status == FLAGGED)
+            {
+                Grid[row][column].Status = UNEXPLORED;
+            }
+            else if (Grid[row][column].Status == EXPLORED)
+            {
+                //eventually throw error to reset turn
+                Console.WriteLine("Cannot flag an explored spot");
+            }
+        }
+
+        public void ExploreSquare(int row, int column)
+        {
+            if (IsValidCoord(row, column) && Grid[row][column].Status == UNEXPLORED) 
+            {
+                Grid[row][column].Status = EXPLORED;
+                if (Grid[row][column].NumBombsAround == 0)
+                {
+                    ExploreSquare(row - 1, column - 1);
+                    ExploreSquare(row, column - 1);
+                    ExploreSquare(row + 1, column - 1);
+                    ExploreSquare(row + 1, column);
+                    ExploreSquare(row + 1, column + 1);
+                    ExploreSquare(row, column + 1);
+                    ExploreSquare(row - 1, column + 1);
+                    ExploreSquare(row - 1, column);
+                }  
+            }
+        }
+
         public MineGrid? MarkSquare(int exploreOrFlag, int row, int column)
         {
             if (!IsValidCoord(row, column))
@@ -209,7 +245,15 @@ namespace MineSweeper
                 Console.WriteLine("Invalid coordinates given");
                 return null;
             }
-            Grid[row][column].Status = exploreOrFlag;
+            if (exploreOrFlag == EXPLORED)
+            {
+                ExploreSquare(row, column);
+            }
+            else if (exploreOrFlag == FLAGGED)
+            {
+                FlagSquare(row, column);
+            }
+            
             return this;
         }
     }
