@@ -16,6 +16,7 @@ namespace MineSweeper
         public const int UNEXPLORED = 0;
         public const int EXPLORED = 1;
         public const int FLAGGED = 2;
+        public bool GameLost = false;
 
         public MineGrid(int rows, int columns, double percentMines) 
         {
@@ -144,6 +145,13 @@ namespace MineSweeper
                         spacing = " ";
                     }
                     MineGridSquare square = Grid[i][j];
+                    if (GameLost && square.IsBomb && square.Status != FLAGGED)
+                    {
+                        Console.ForegroundColor = ConsoleColor.Red;
+                        Console.Write($"X{spacing}");
+                        Console.ResetColor();
+                        continue;
+                    }
                     int status = Grid[i][j].Status; 
                     if (status == UNEXPLORED)
                     {
@@ -153,21 +161,23 @@ namespace MineSweeper
                     {
                         if (square.NumBombsAround == 0)
                         {
+                            Console.BackgroundColor = ConsoleColor.Green;
                             Console.Write($" {spacing}");
-                        }
-                        else if (square.NumBombsAround == -1)
-                        {
-                            Console.Write($"X{spacing}");
                         }
                         else
                         {
+                            Console.BackgroundColor = ConsoleColor.DarkYellow;
+                            Console.ForegroundColor = ConsoleColor.Black;
                             Console.Write($"{square.NumBombsAround + spacing}");
                         }
-                        
+                        Console.ResetColor();
                     }
                     else if (status == FLAGGED)
                     {
+                        Console.BackgroundColor = ConsoleColor.DarkYellow;
+                        Console.ForegroundColor = ConsoleColor.Red;
                         Console.Write($"-{spacing}");
+                        Console.ResetColor();
                     }
                     else
                     {
@@ -224,6 +234,10 @@ namespace MineSweeper
             if (IsValidCoord(row, column) && Grid[row][column].Status == UNEXPLORED) 
             {
                 Grid[row][column].Status = EXPLORED;
+                if (Grid[row][column].IsBomb)
+                {
+                    GameLost = true;
+                }
                 if (Grid[row][column].NumBombsAround == 0)
                 {
                     ExploreSquare(row - 1, column - 1);
