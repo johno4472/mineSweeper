@@ -6,9 +6,15 @@ Console.WriteLine("Hello, World!");
 MineGrid game = new MineGrid(14, 18, 0.1);
 game.DisplayGrid();
 
-game.MarkSquare(2, 2, 2);
-game.MarkSquare(1, 3, 2);
-game.MarkSquare(1, 4, 2);
-game.MarkSquare(1, 5, 2);
+string row;
+string column;
+while (true)
+{
+    Console.Write("Row: ");
+    row = Console.ReadLine() ?? " ";
+    Console.Write("\nColumn: ");
+    column = Console.ReadLine() ?? " ";
+    game.MarkSquare(2, Int32.Parse(row), Int32.Parse(column));
+    game.DisplayGrid();
+}
 
-game.DisplayGrid();
