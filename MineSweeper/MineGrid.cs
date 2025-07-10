@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.Design;
 using System.Linq;
+using System.Reflection.Metadata.Ecma335;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -129,6 +130,7 @@ namespace MineSweeper
                 }
             }
             Console.WriteLine("_");
+            var rowShade = ConsoleColor.DarkGreen;
             for (int i = 0; i < Grid.Count; i++)
             {
                 Console.Write($"{i} ");
@@ -158,7 +160,7 @@ namespace MineSweeper
                     int status = Grid[i][j].Status; 
                     if (status == UNEXPLORED)
                     {
-                        Console.ForegroundColor = ConsoleColor.DarkGreen;
+                        Console.ForegroundColor = rowShade;
                         Console.Write($"O{spacing}");
                         Console.ResetColor();
                     }
@@ -188,6 +190,14 @@ namespace MineSweeper
                     }
                 }
                 Console.WriteLine($"| {i}");
+                if (rowShade == ConsoleColor.DarkGreen)
+                {
+                    rowShade = ConsoleColor.Green;
+                }
+                else
+                {
+                    rowShade = ConsoleColor.DarkGreen;
+                }
             }
             Console.Write("   |");
             for (int i = 0; i < Grid[0].Count; i++)
@@ -225,11 +235,6 @@ namespace MineSweeper
             {
                 Grid[row][column].Status = UNEXPLORED;
             }
-            else if (Grid[row][column].Status == EXPLORED)
-            {
-                ResetTurn = true;
-                Console.WriteLine("Cannot flag an explored spot. Unflag it first");
-            }
         }
 
         public void ExploreSquare(int row, int column)
@@ -259,11 +264,10 @@ namespace MineSweeper
 
         public MineGrid? MarkSquare(int exploreOrFlag, int row, int column)
         {
-            if (!IsValidCoord(row, column))
+            if (Grid[row][column].Status == EXPLORED)
             {
-                ResetTurn = true;
-                Console.WriteLine("Invalid coordinates given");
-                return null;
+                Console.WriteLine($"Square at row {row}, column {column} is already explored. Try again");
+                return this;
             }
             if (exploreOrFlag == EXPLORED)
             {
@@ -273,8 +277,8 @@ namespace MineSweeper
             {
                 FlagSquare(row, column);
             }
-            
-            return this;
+
+                return this;
         }
 
         public bool CheckIfWinner()
