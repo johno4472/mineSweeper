@@ -112,7 +112,7 @@ namespace MineSweeper
                 if (writeNums)
                 {
                     Console.Write($"{i} ");
-                    if (i + 1 < 10)
+                    if (i < 10)
                     {
                         Console.Write(' ');
                     }
@@ -205,7 +205,7 @@ namespace MineSweeper
                 else
                 {
                     Console.Write($"{i} ");
-                    if (i + 1 < 10)
+                    if (i  < 10)
                     {
                         Console.Write(' ');
                     }

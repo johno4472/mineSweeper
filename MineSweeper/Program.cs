@@ -67,6 +67,7 @@ int row;
 int column;
 while (true)
 {
+    game.ResetTurn = false;
     try
     {
         Console.Write("\nExplore(1) or Flag(2): ");
